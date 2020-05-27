@@ -27,16 +27,18 @@ func (boardService *BoardService) PutMarkInPosition(player *components.Player, p
 	if boardService.Board.Cells[position].Mark == components.OMark || boardService.Board.Cells[position].Mark == components.XMark {
 		return errors.New("Cell has already been marked, please try another cell")
 	}
-	boardService.Board.Cells[position].Mark = player.Mark
+	boardService.Board.Cells[position].SetMark(player.Mark)
 	return nil
 }
 
 //PrintBoard : Returns a slice of Cells which can then be printed in a loop
-func (boardService *BoardService) PrintBoard() {
+func (boardService *BoardService) PrintBoard() string {
 	var i uint8
-	for i = 0; i < boardService.Board.Size; i++ {
-		fmt.Printf("\t%s", boardService.Board.Cells[i].Mark)
-	}
+	var printMessage string
+	//for i = 0; i < boardService.Board.Size; i++ {
+	printMessage = fmt.Sprintf("%s\t", boardService.Board.Cells[i].Mark)
+
+	return printMessage
 }
 
 //CheckBoardIsFull : checks if the board is full
