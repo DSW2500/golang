@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"ticgame/components"
 )
 
@@ -33,12 +32,16 @@ func (boardService *BoardService) PutMarkInPosition(player *components.Player, p
 
 //PrintBoard : Returns a slice of Cells which can then be printed in a loop
 func (boardService *BoardService) PrintBoard() string {
-	var i uint8
-	var printMessage string
-	//for i = 0; i < boardService.Board.Size; i++ {
-	printMessage = fmt.Sprintf("%s\t", boardService.Board.Cells[i].Mark)
-
-	return printMessage
+	var out string = ""
+	size := boardService.Board.Size * boardService.Board.Size
+	var i uint8 = 0
+	for ; i < size-1; i++ {
+		out += boardService.Board.Cells[i].Mark
+		if (i % boardService.Board.Size) == (boardService.Board.Size)-1 {
+			out += "\n"
+		}
+	}
+	return out
 }
 
 //CheckBoardIsFull : checks if the board is full
