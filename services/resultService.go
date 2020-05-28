@@ -84,21 +84,3 @@ func (resultService *ResultService) GetResult(player components.Player) string {
 	return "InProcess"
 }
 
-// 	for i := 0; i < boardSize; i++ {
-// 		marker:=resultService.BoardService.Board.Cells
-// //First we check even index aka corner cells:
-// if i%2==0{
-// 	//Making sure this is not a center cell : index 4
-// 	if i!=(size+1){
-// 		//Making sure these corner elements are not placed at the end of each row: indices - 0 and 6
-// 		if !((i+1)%size==0){
-// 			if (marker[i].Mark==marker[i+1].Mark&& marker[i].Mark==marker[i+2].Mark ){
-// 				return Winner
-// 			}else if(marker[i].Mark==marker[i+size]&& marker[i].Mark==marker[i+]){
-
-// 			}
-// 		}
-// 	}
-// }
-// 	}
-// }
