@@ -15,7 +15,7 @@ type ResultService struct {
 func NewResultService(boardService *BoardService) *ResultService {
 	return &ResultService{
 		BoardService: boardService,
-		Result:       "In Process",
+		Result:       "The game is still in Process",
 	}
 }
 
