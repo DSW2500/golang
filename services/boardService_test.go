@@ -12,7 +12,7 @@ var size uint8
 actual:= &Board{
 		Cells: []*Cell{
 			{Mark: NoMark},
-			{Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}},
+			{Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark}, {Mark: NoMark},},
 		Size: 9,
 	}
 	var i uint8
@@ -20,5 +20,5 @@ actual:= &Board{
 	if actual.Board.Cells[i].Mark!=expected.Board.Cells[i].Mark {
 		t.Error("Error")
 	}
-
+}
 }
