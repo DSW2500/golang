@@ -97,7 +97,3 @@ func checkDiagonal(b *ResultService, player components.Player) bool {
 	}
 	return flag
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 436c8f6f40267c8d85a5ef40d31c3bd163f3e955
