@@ -1,6 +1,9 @@
 package services
 
-import "ticgame/components"
+import (
+	"fmt"
+	"ticgame/components"
+)
 
 //ResultService :
 type ResultService struct {
@@ -16,89 +19,81 @@ func NewResultService(boardService *BoardService) *ResultService {
 	}
 }
 
-//GetResult :
+//GetResult : Public function which will be used and encapsulates all the other functions used for evaluating result
 func (resultService *ResultService) GetResult(player components.Player) string {
-	// size := int(resultService.BoardService.Board.Size )
-	board := resultService.BoardService.Board.Cells
-	if board[0].Mark == board[4].Mark { // check the diagonal from left top to right bottom corner
-		if board[4].Mark == board[8].Mark {
-			if board[4].Mark != "-" {
-				return "Winner! " + player.Name
-			}
+	res, winner := resultService.evaluateResult(player)
+	if res {
+		if winner == nil {
+			resultService.Result = "It was a draw!"
 		}
+		resultService.Result = fmt.Sprintf("We have a winner!!\nPlayer : %s, Mark: %s has won!\n", winner.Name, winner.Mark)
 	}
-	if board[2].Mark == board[4].Mark { // check the diagonal from right top to left bottom corner
-		if board[4].Mark == board[6].Mark {
-			if board[6].Mark != "-" {
-				return "Winner! " + player.Name
-			}
-		}
-	}
-	if board[0].Mark == board[3].Mark { // check the left column
-		if board[3].Mark == board[6].Mark {
-			if board[6].Mark != "-" {
-				return "Winner! " + player.Name
-			}
-		}
-	}
-	if board[0].Mark == board[1].Mark { // check the top row
-		if board[1].Mark == board[2].Mark {
-			if board[0].Mark != "-" {
-				return "Winner! " + player.Name
-			}
-		}
-	}
-	if board[2].Mark == board[5].Mark { // check right column
-		if board[5].Mark == board[8].Mark {
-			if board[2].Mark != "-" {
-				return "Winner! " + player.Name
-			}
-		}
-	}
-	if board[6].Mark == board[7].Mark { // check bottom row
-		if board[7].Mark == board[8].Mark {
-			if board[8].Mark != "-" {
-				return "Winner! " + player.Name
-			}
-		}
-	}
-	if board[1].Mark == board[4].Mark { // check middle column
-		if board[4].Mark == board[7].Mark {
-			if board[1].Mark != "-" {
-				return "Winner! " + player.Name
-			}
-		}
-	}
-	if board[3].Mark == board[4].Mark { // check middle row
-		if board[4].Mark == board[5].Mark {
-			if board[3].Mark != "" {
-				return "Winner! " + player.Name
-
-			}
-		}
-	}
-	//If Board is full and no winner has been declared, game ends in a draw!
-	if resultService.BoardService.CheckBoardIsFull() {
-		return "Draw!"
-	}
-	return "InProcess"
+	resultService.Result = "The game is still in Process"
+	return resultService.Result
 }
 
-// 	for i := 0; i < boardSize; i++ {
-// 		marker:=resultService.BoardService.Board.Cells
-// //First we check even index aka corner cells:
-// if i%2==0{
-// 	//Making sure this is not a center cell : index 4
-// 	if i!=(size+1){
-// 		//Making sure these corner elements are not placed at the end of each row: indices - 0 and 6
-// 		if !((i+1)%size==0){
-// 			if (marker[i].Mark==marker[i+1].Mark&& marker[i].Mark==marker[i+2].Mark ){
-// 				return Winner
-// 			}else if(marker[i].Mark==marker[i+size]&& marker[i].Mark==marker[i+]){
+func (resultService *ResultService) evaluateResult(player components.Player) (bool, *components.Player) {
+	if checkRows(resultService, player) {
+		return true, &player
+	} else if checkColumns(resultService, player) {
+		return true, &player
+	} else if checkDiagonal(resultService, player) {
+		return true, &player
+	} else if resultService.BoardService.CheckBoardIsFull() {
+		return true, nil
+	}
+	return false, nil
+}
+func checkRows(b *ResultService, player components.Player) bool {
+	//We check row-wise and iterate through cells
+	flag := true
+	size := int(b.BoardService.Board.Size)
+	for i := 0; i < (size * size); i = i + size {
+		flag = true
+		for j := i; j < (i + size); j++ {
+			if b.BoardService.Board.Cells[j].GetMark() != player.Mark {
+				flag = false
+			}
+		}
+		if flag {
+			return flag
+		}
+	}
+	return flag
+}
 
-// 			}
-// 		}
-// 	}
-// }
-// 	}
-// }
+func checkColumns(b *ResultService, player components.Player) bool {
+	flag := true
+	size := int(b.BoardService.Board.Size)
+	for i := 0; i < size; i++ {
+		flag = true
+		for j := i; j < (size * size); j = j + size {
+			if b.BoardService.Board.Cells[j].GetMark() != player.Mark {
+				flag = false
+			}
+		}
+		if flag {
+			return flag
+		}
+	}
+	return flag
+}
+func checkDiagonal(b *ResultService, player components.Player) bool {
+	flag := true
+	size := int(b.BoardService.Board.Size)
+	for i := 0; i < size; i++ {
+		if b.BoardService.Board.Cells[size*i+i].GetMark() != player.Mark {
+			flag = false
+		}
+	}
+	if flag {
+		return flag
+	}
+	flag = true
+	for i := 0; i < size; i++ {
+		if b.BoardService.Board.Cells[(size*i)+(size-1-i)].GetMark() != player.Mark {
+			flag = false
+		}
+	}
+	return flag
+}
